@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profiles</title>
+</head>
+
+<body>
+    <h1>User Profiles</h1>
+    <div id="profiles"></div>
+
+    <script>
+        async function fetchUserProfiles() {
+            try {
+                const response = await fetch('userProfiles.json');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const userProfiles = await response.json();
+                displayProfiles(userProfiles);
+            } catch (error) {
+                console.error('There has been a problem with your fetch operation:', error);
+            }
+        }
+
+        function displayProfiles(profiles) {
+            const profilesDiv = document.getElementById('profiles');
+            profiles.forEach(profile => {
+                const profileDiv = document.createElement('div');
+                profileDiv.innerHTML = `
+                    <h2>${profile.firstName} ${profile.lastName}</h2>
+                    <p>Email: ${profile.email}</p>
+                    <p>Date of Birth: ${profile.dateOfBirth}</p>
+                    <h3>Address:</h3>
+                    <p>${profile.address.street}, ${profile.address.city}, ${profile.address.state} ${profile.address.zipCode}</p>
+                    <h3>Preferences:</h3>
+                    <p>Theme: ${profile.preferences.theme}</p>
+                    <p>Language: ${profile.preferences.language}</p>
+                    <p>Notifications: ${profile.preferences.notifications}</p>
+                    <p>Subscribed to Newsletter: ${profile.preferences.subscription}</p>
+                `;
+                profilesDiv.appendChild(profileDiv);
+            });
+        }
+
+        fetchUserProfiles();
+    </script>
+</body>
+
+</html>
